@@ -1,0 +1,49 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  tgId        BigInt   @default(-1) @map("tg_id")
+  tgNick      String?  @map("tg_nick") @db.VarChar(255)
+  name        String?  @db.VarChar(255)
+  age         Int      @default(-1)
+  sex         Int      @default(-1)
+  experience  Int      @default(-1)
+  image       Json
+  type        Int      @default(-1)
+  profession  Int
+  currentUser Int      @default(-1) @map("current")
+  date        DateTime @default(now())
+  isAdmin     Boolean  @default(false) @map("is_admin")
+
+  @@map("users")
+}
+
+model Profession {
+  id   Int     @id @default(autoincrement())
+  name String? @db.VarChar(255)
+
+  @@map("professions")
+}
+
+model Reaction {
+  id      Int      @id @default(autoincrement())
+  user    Int      @default(-1)
+  reacted Int      @default(-1)
+  type    Boolean
+  date    DateTime @default(now())
+
+  @@map("reactions")
+}
